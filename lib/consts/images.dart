@@ -1,6 +1,6 @@
 //icons
 const icAdd = "assets/icons/add.png";
-const icAppLogo = "assets/icons/app_logo.png";
+const icAppLogo = "assets/icons/app_logo.jpg";
 const icAppleLogo = "assets/icons/apple_logo.png";
 const icArrow = "assets/icons/arrow.png";
 const icBell = "assets/icons/bell.png";
@@ -51,7 +51,7 @@ const icWholeSale = "assets/icons/wholesale.png";
 
 //images
 
-const imgBackground = "assets/icons/bg.png";
+const imgBackground = "assets/icons/pp.jpg";
 const imgB1 = "assets/images/b1.jpeg";
 const imgB2 = "assets/images/b2.jpeg";
 const imgB3 = "assets/images/b3.jpeg";
@@ -114,17 +114,18 @@ const imgS9 = "assets/images/s9.jpg";
 const imgS10 = "assets/images/s10.jpg";
 const imgS11 = "assets/images/s11.jpg";
 const imgS12 = "assets/images/s12.jpg";
-const imgSs1 = "assets/images/ss1.jpg";
-const imgSs2 = "assets/images/ss2.jpg";
-const imgSs3 = "assets/images/ss3.jpg";
-const imgSs4 = "assets/images/ss4.jpg";
+const imgSs1 = "assets/images/m1.jpg";
+const imgSs2 = "assets/images/m2.png";
+const imgSs3 = "assets/images/m3.jpg";
+const imgSs4 = "assets/images/m4.jpg";
 const imgSave = "assets/images/save.png";
-const imgSlider1 = "assets/images/slider_1.png";
-const imgSlider2 = "assets/images/slider_2.png";
-const imgSlider3 = "assets/images/slider_3.png";
-const imgSlider4 = "assets/images/slider_4.png";
+const imgSlider1 = "assets/images/slider_1.jpg";
+const imgSlider2 = "assets/images/slider_2.jpg";
+const imgSlider3 = "assets/images/slider_3.jpg";
+const imgSlider4 = "assets/images/slider_4.jpg";
 const imgSslcommerz = "assets/images/sslcommerz.png";
 const imgStripe = "assets/images/stripe.png";
 const imgTwocheckout = "assets/images/twocheckout.png";
 const imgVogue = "assets/images/vogue.png";
 const imgWallet = "assets/images/wallet.png";
+
