@@ -25,7 +25,7 @@ class ProfileScreen extends StatelessWidget {
                   },
                   child: Align(
                     alignment: Alignment.topRight,
-                    child: Icon(Icons.edit, color: Colors.black),
+                    child: Icon(Icons.edit, color:redColor),
                   ),
                 ),
                 10.heightBox, // Add spacing after the GestureDetector
@@ -48,7 +48,7 @@ class ProfileScreen extends StatelessWidget {
                     OutlinedButton(
                       style: OutlinedButton.styleFrom(
                         side: const BorderSide(
-                          color: Colors.black,
+                          color: redColor,
                         ),
                       ),
                       onPressed: () async {
@@ -60,7 +60,7 @@ class ProfileScreen extends StatelessWidget {
                         style: TextStyle(
                           fontFamily: 'semibold', // Replace with your desired font family
                           fontWeight: FontWeight.bold, // FontWeight for semibold
-                          color: Colors.black,
+                          color:redColor,
                         ),
                       ),
                     ),
