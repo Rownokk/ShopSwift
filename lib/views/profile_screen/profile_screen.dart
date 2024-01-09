@@ -3,7 +3,6 @@ import 'package:emart_app/consts/lists.dart';
 import 'package:emart_app/controller/auth_controller.dart';
 import 'package:emart_app/views/auth_screen/login_screen.dart';
 import 'package:emart_app/views/profile_screen/components/details_card.dart';
-import 'package:emart_app/widgets_common/bg_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -12,9 +11,10 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return bgWidget(
-      child: Scaffold(
-        body: SafeArea(
+    return Scaffold(
+      body: Container(
+        color: mediumPeachyPinkColor, // Set your desired background color here
+        child: SafeArea(
           child: Container(
             padding: const EdgeInsets.all(8),
             child: Column(
@@ -25,7 +25,7 @@ class ProfileScreen extends StatelessWidget {
                   },
                   child: Align(
                     alignment: Alignment.topRight,
-                    child: Icon(Icons.edit, color:redColor),
+                    child: Icon(Icons.edit, color: redColor),
                   ),
                 ),
                 10.heightBox, // Add spacing after the GestureDetector
@@ -53,14 +53,14 @@ class ProfileScreen extends StatelessWidget {
                       ),
                       onPressed: () async {
                         await Get.put(AuthController()).signoutMethod(context);
-                        Get.offAll(()=>const LoginScreen());
+                        Get.offAll(() => const LoginScreen());
                       },
                       child: Text(
                         'Logout',
                         style: TextStyle(
-                          fontFamily: 'semibold', // Replace with your desired font family
-                          fontWeight: FontWeight.bold, // FontWeight for semibold
-                          color:redColor,
+                          fontFamily: 'semibold',
+                          fontWeight: FontWeight.bold,
+                          color: redColor,
                         ),
                       ),
                     ),
@@ -78,24 +78,17 @@ class ProfileScreen extends StatelessWidget {
                 40.heightBox,
                 ListView.separated(
                   shrinkWrap: true,
-                  separatorBuilder: (context,index){
-                    return const Divider(
-                      color: lightGrey
-                    );
+                  separatorBuilder: (context, index) {
+                    return const Divider(color: lightGrey);
                   },
                   itemCount: profileButtonList.length,
-                  itemBuilder: (BuildContext context,int index){
+                  itemBuilder: (BuildContext context, int index) {
                     return ListTile(
-                      leading: Image.asset(
-                      profileButtonsIcon[index],
-                      width:22,
-                      ),
+                      leading: Image.asset(profileButtonsIcon[index], width: 22),
                       title: profileButtonList[index].text.fontFamily(semibold).color(darkFontGrey).make(),
                     );
                   },
-                  
                 ).box.white.rounded.padding(EdgeInsets.symmetric(horizontal: 16)).shadowSm.make(),
-
               ],
             ),
           ),
