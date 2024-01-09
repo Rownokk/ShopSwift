@@ -6,12 +6,13 @@ import 'package:emart_app/consts/consts.dart';
 
 
 class AuthController extends GetxController{
+   var emailController=TextEditingController();
+   var passwordController=TextEditingController();
 
-
-  Future<UserCredential?> loginMethod({email,password,context}) async{
+  Future<UserCredential?> loginMethod({context}) async{
     UserCredential? userCredential;
     try {
-    await auth.signInWithEmailAndPassword(email: email,password: password);
+    await auth.signInWithEmailAndPassword(email: emailController.text,password: passwordController.text);
 
     }on FirebaseAuthException catch(e){
       VxToast.show(context, msg: e.toString());

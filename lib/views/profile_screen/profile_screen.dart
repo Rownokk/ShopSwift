@@ -1,8 +1,11 @@
 import 'package:emart_app/consts/consts.dart';
 import 'package:emart_app/consts/lists.dart';
+import 'package:emart_app/controller/auth_controller.dart';
+import 'package:emart_app/views/auth_screen/login_screen.dart';
 import 'package:emart_app/views/profile_screen/components/details_card.dart';
 import 'package:emart_app/widgets_common/bg_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -37,8 +40,8 @@ class ProfileScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          "Dummy User".text.semiBold.black.make(),
-                          "customer@example.com".text.black.make(),
+                          "Customer".text.semiBold.black.make(),
+                          "customer@gmail.com".text.black.make(),
                         ],
                       ),
                     ),
@@ -48,7 +51,10 @@ class ProfileScreen extends StatelessWidget {
                           color: Colors.black,
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () async {
+                        await Get.put(AuthController()).signoutMethod(context);
+                        Get.offAll(()=>const LoginScreen());
+                      },
                       child: Text(
                         'Logout',
                         style: TextStyle(

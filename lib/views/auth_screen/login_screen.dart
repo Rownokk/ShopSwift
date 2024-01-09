@@ -1,5 +1,6 @@
 import 'package:emart_app/consts/consts.dart';
 import 'package:emart_app/consts/lists.dart';
+import 'package:emart_app/controller/auth_controller.dart';
 import 'package:emart_app/views/auth_screen/signup_screen.dart';
 import 'package:emart_app/views/home_screen/home.dart';
 import 'package:emart_app/widgets_common/applogo_widget.dart';
@@ -13,6 +14,7 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var controller=Get.put(AuthController());
     return bgWidget(child: Scaffold(
       resizeToAvoidBottomInset: false,
       body: Center(
@@ -25,8 +27,8 @@ class LoginScreen extends StatelessWidget {
               15.heightBox,
               Column(
                 children: [
-                  customTextField(hint: emailHint,title: email,isPass:false ),
-                  customTextField(hint: passwordHint,title: password,isPass:true),
+                  customTextField(hint: emailHint,title: email,isPass:false,controller: controller.emailController ),
+                  customTextField(hint: passwordHint,title: password,isPass:true,controller: controller.passwordController),
 
 
                   Align(
@@ -34,9 +36,17 @@ class LoginScreen extends StatelessWidget {
                       child: TextButton(onPressed: () {}, child: forgetPass.text.color(redColor).make())),
                   5.heightBox,
                   //   ourButton().box.width(context.screenWidth-50).make(),
-                  ourButton(color:redColor,title: login,textColor: whiteColor,onPress: (){
+                  ourButton(color:redColor,title: login,textColor: whiteColor,
+                      onPress: ()async
+                  {await controller.loginMethod(context: context).then((value){
+                    if(value!=null){
+                      VxToast.show(context, msg: loggedin);
+                      Get.offAll(()=>const Home());
+
+                    }
+                  });
                     Get.to(()=>const Home());
-                  })
+                  },)
                       .box
                       .width(context.screenWidth-50)
                       .make(),
