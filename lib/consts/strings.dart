@@ -20,3 +20,4 @@ const termAndCond="Terms & Conditions";
 const alreadyHaveAccount="Already have an account? ";
 const home="Home", categories="Categories",cart="Cart",account="Account";
 const searchanything="Search anything...", todayDeal="Todays Deal",flashsale="Flash Sale",topSellers="Top Sellers",brand="Brand",topCategories="Top Categories",featuredCategories="Featured Categories";
+const wishlist="My wishlist",orders="My Orders",messages="Messages";
