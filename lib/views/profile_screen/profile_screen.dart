@@ -3,6 +3,7 @@ import 'package:emart_app/consts/lists.dart';
 import 'package:emart_app/controller/auth_controller.dart';
 import 'package:emart_app/views/auth_screen/login_screen.dart';
 import 'package:emart_app/views/profile_screen/components/details_card.dart';
+import 'package:emart_app/views/profile_screen/edit_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -21,7 +22,7 @@ class ProfileScreen extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () {
-                    // Your onTap logic here
+                    Get.to(()=>const EditProfileScreen());
                   },
                   child: Align(
                     alignment: Alignment.topRight,
