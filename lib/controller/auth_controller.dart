@@ -6,6 +6,7 @@ import 'package:emart_app/consts/consts.dart';
 
 
 class AuthController extends GetxController{
+  var isloading= false.obs;
    var emailController=TextEditingController();
    var passwordController=TextEditingController();
 
@@ -37,7 +38,8 @@ return userCredential;
         "name":name,
       "password":password,
       "email":email,
-      "imageUrl":""
+      "imageUrl":" ",
+      "id ":currentUser!.uid,
     });
     
   }
