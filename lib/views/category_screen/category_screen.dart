@@ -16,6 +16,7 @@ class CategoryScreen extends StatelessWidget {
         ),
         body: Container(
           padding: const EdgeInsets.all(12),
+          color: mediumPeachyPinkColor, // Set your desired background color here
           child: GridView.builder(
             shrinkWrap: true,
             itemCount: 9,
@@ -89,12 +90,14 @@ class CategoryScreen extends StatelessWidget {
         children: [
           Container(
             height: 140,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: NetworkImage(imagePath),
+            color: Colors.white, // Set your desired background color here
+            child: Center(
+              child: Image.network(
+                imagePath,
                 fit: BoxFit.cover,
+                height: double.infinity,
+                width: double.infinity,
               ),
-              borderRadius: BorderRadius.circular(10),
             ),
           ),
           SizedBox(height: 8),
@@ -108,3 +111,4 @@ class CategoryScreen extends StatelessWidget {
     );
   }
 }
+
