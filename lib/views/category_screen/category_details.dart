@@ -225,26 +225,26 @@ class BarsDetails extends StatelessWidget {
         },
 
       ],
-      'Cable-knit Sweater':
+      'Cable-Knit Sweater':
 
-          [{"name": "Classic Cable",
+      [{"name": "Classic Cable",
 
-    "price": "\$79.99",
-    "image": "https://cdn.tobi.com/product_images/lg/1/taupe-driftwood-cable-knit-sweater.jpg"},
+        "price": "\$79.99",
+        "image": "https://cdn.tobi.com/product_images/lg/1/taupe-driftwood-cable-knit-sweater.jpg"},
 
-    {"name": "Elegant Twis",
-    "price": "\$94.99",
-    "image": "https://aknittingblog.com/wp-content/uploads/2014/03/Irish-Cable-Knit-Sweater-Pattern.jpg"}
-    ,
-   { "name": "Modern Cable",
-    "price": "\$87.50",
-    "image": "https://content.woolovers.com/img/o/49416_b78l_neonavy_w_5.jpg"},
+        {"name": "Elegant Twis",
+          "price": "\$94.99",
+          "image": "https://aknittingblog.com/wp-content/uploads/2014/03/Irish-Cable-Knit-Sweater-Pattern.jpg"}
+        ,
+        { "name": "Modern Cable",
+          "price": "\$87.50",
+          "image": "https://content.woolovers.com/img/o/49416_b78l_neonavy_w_5.jpg"},
 
-    {"name": "Timeless ",
+        {"name": "Timeless ",
 
-    "price": "\$99.95",
-    "image": "https://gap-fe-prod-cdn-1.mnpcdn.ae/small_light(p=zoom,of=jpg,q=70)/pub/media/catalog/product/2/1/213136643_473972_01_in.jpg?1572536655.5504"},
-          ],
+          "price": "\$99.95",
+          "image": "https://gap-fe-prod-cdn-1.mnpcdn.ae/small_light(p=zoom,of=jpg,q=70)/pub/media/catalog/product/2/1/213136643_473972_01_in.jpg?1572536655.5504"},
+      ],
 
       'Keds': [
         {
@@ -887,28 +887,7 @@ class BarsDetails extends StatelessWidget {
           "image": "https://www.skylinewears.com/wp-content/uploads/2019/01/5.jpg"
         },
       ],
-      'Culottes': [
-        {
-          "name": "High-Waisted Pleated Culottes",
-          "price": "\$34.99",
-          "image": "https://example-image-url117.com"
-        },
-        {
-          "name": "Printed Wide-Leg Culottes",
-          "price": "\$29.95",
-          "image": "https://example-image-url118.com"
-        },
-        {
-          "name": "Cropped Denim Culottes",
-          "price": "\$39.99",
-          "image": "https://example-image-url119.com"
-        },
-        {
-          "name": "Striped Linen Culottes",
-          "price": "\$34.50",
-          "image": "https://example-image-url120.com"
-        },
-      ],
+
       'Culottes': [
         {
           "name": "Pleated Culottes",
@@ -1355,47 +1334,47 @@ class BarsDetails extends StatelessWidget {
                   String itemImage = categoryData[category]![index]["image"];
 
                   return GestureDetector(
-                      onTap: () {
-                        // Handle item tap
-                      },
-                      child: Container(
-                        width: double.infinity,
-                        color: backgroundColor,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(16),
-                              child: Image.network(
-                                itemImage,
-                                height: 240,
-                                width: double.infinity,
-                                fit: BoxFit.cover,
-                              ),
+                    onTap: () {
+                      // Handle item tap
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      color: backgroundColor,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(16),
+                            child: Image.network(
+                              itemImage,
+                              height: 240,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
                             ),
-                            16.heightBox,
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 12),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  itemName.text.fontFamily(semibold).color(
-                                      darkFontGrey).size(18).make(),
-                                  8.heightBox,
-                                  "$itemPrice".text.color(redColor).fontFamily(
-                                      bold).size(16).make(),
-                                ],
-                              ),
+                          ),
+                          16.heightBox,
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                itemName.text.fontFamily(semibold).color(
+                                    darkFontGrey).size(18).make(),
+                                8.heightBox,
+                                "$itemPrice".text.color(redColor).fontFamily(
+                                    bold).size(16).make(),
+                              ],
                             ),
-                          ],
-                        ),
-                      ).box
-                          .white
-                          .margin(const EdgeInsets.symmetric(horizontal: 8))
-                          .roundedSM
-                          .outerShadowSm
-                          .padding(const EdgeInsets.all(16))
-                          .make(),
+                          ),
+                        ],
+                      ),
+                    ).box
+                        .white
+                        .margin(const EdgeInsets.symmetric(horizontal: 8))
+                        .roundedSM
+                        .outerShadowSm
+                        .padding(const EdgeInsets.all(16))
+                        .make(),
                   );
                 },
               ),

@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emart_app/consts/consts.dart';
 import 'package:emart_app/consts/lists.dart';
@@ -49,7 +48,7 @@ class ProfileScreen extends StatelessWidget {
                           child: Icon(Icons.edit, color: redColor),
                         ),
                       ),
-                      10.heightBox, // Add spacing after the GestureDetector
+                      10.heightBox,
                       Row(
                         children: [
                           data['imageUrl'] == null || data['imageUrl'] == ""
@@ -97,12 +96,15 @@ class ProfileScreen extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          detailsCard(count: data['card_count']?.toString() ?? "0", title: "in your cart", width: context.screenWidth / 3.4),
-                          detailsCard(count: data['wishlist_count']?.toString() ?? "0", title: "in your wishlist", width: context.screenWidth / 3.4),
+                          detailsCard(
+                              count: data['card_count']?.toString() ?? "0", title: "in your cart", width: context.screenWidth / 3.4),
+                          detailsCard(
+                              count: data['wishlist_count']?.toString() ?? "0", title: "in your wishlist", width: context.screenWidth / 3.4),
                           detailsCard(count: data['order_count']?.toString() ?? "0", title: "your orders", width: context.screenWidth / 3.4),
                         ],
                       ),
                       40.heightBox,
+                      // ListView for profileButtonList
                       ListView.separated(
                         shrinkWrap: true,
                         separatorBuilder: (context, index) {
@@ -110,10 +112,22 @@ class ProfileScreen extends StatelessWidget {
                         },
                         itemCount: profileButtonList.length,
                         itemBuilder: (BuildContext context, int index) {
-                          return ListTile(
-                            leading: Image.asset(profileButtonsIcon[index], width: 22),
-                            title: profileButtonList[index].text.fontFamily(semibold).color(darkFontGrey).make(),
-                          );
+                          if (profileButtonList[index] == "Messages") {
+                            return ListTile(
+                              onTap: () {
+                                // Handle the button click to navigate to the messaging page
+                                // You can pass necessary data to the messaging page if needed
+                                Get.to(() => _MessagesPageState());
+                              },
+                              leading: Image.asset(profileButtonsIcon[index], width: 22),
+                              title: profileButtonList[index].text.fontFamily(semibold).color(darkFontGrey).make(),
+                            );
+                          } else {
+                            return ListTile(
+                              leading: Image.asset(profileButtonsIcon[index], width: 22),
+                              title: profileButtonList[index].text.fontFamily(semibold).color(darkFontGrey).make(),
+                            );
+                          }
                         },
                       ).box.white.rounded.padding(EdgeInsets.symmetric(horizontal: 16)).shadowSm.make(),
                     ],
@@ -128,4 +142,152 @@ class ProfileScreen extends StatelessWidget {
   }
 }
 
+class ChatMessage {
+  final String id;
+  final String text;
+  final String senderId;
+  final DateTime timestamp;
 
+  ChatMessage({
+    required this.id,
+    required this.text,
+    required this.senderId,
+    required this.timestamp,
+  });
+}
+
+class MessagesPage extends StatefulWidget {
+  final String receiverId;
+  final String deliveryManId;
+  final String chatRoomId; // Pass _chatRoomId as a parameter
+
+  MessagesPage({
+    required this.receiverId,
+    required this.deliveryManId,
+    required this.chatRoomId,
+  });
+
+  @override
+  _MessagesPageState createState() => _MessagesPageState();
+}
+
+class _MessagesPageState extends State<MessagesPage> {
+  late TextEditingController _messageController;
+  late ScrollController _scrollController;
+  late List<ChatMessage> _messages;
+
+  @override
+  void initState() {
+    super.initState();
+    _messageController = TextEditingController();
+    _scrollController = ScrollController();
+    _messages = [];
+
+    _loadMessages();
+  }
+
+  void _loadMessages() {
+    FirebaseFirestore.instance
+        .collection('messages')
+        .doc(widget.chatRoomId) // Use widget.chatRoomId instead of _chatRoomId
+        .collection('chats')
+        .orderBy('timestamp', descending: true)
+        .snapshots()
+        .listen((snapshot) {
+      setState(() {
+        _messages = snapshot.docs.map((doc) {
+          var data = doc.data() as Map<String, dynamic>;
+          return ChatMessage(
+            id: doc.id,
+            text: data['text'],
+            senderId: data['senderId'],
+            timestamp: (data['timestamp'] as Timestamp).toDate(),
+          );
+        }).toList();
+      });
+
+      // Scroll to the latest message
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    });
+  }
+
+  Widget _buildMessageComposer() {
+    return Container(
+      padding: EdgeInsets.all(8.0),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              controller: _messageController,
+              textInputAction: TextInputAction.send,
+              onSubmitted: _handleSendMessage,
+              decoration: InputDecoration.collapsed(
+                hintText: 'Type a message',
+              ),
+            ),
+          ),
+          IconButton(
+            icon: Icon(Icons.send),
+            onPressed: () => _handleSendMessage(_messageController.text),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _handleSendMessage(String message) {
+    if (message.trim().isNotEmpty) {
+      FirebaseFirestore.instance
+          .collection('messages')
+          .doc(widget.chatRoomId)
+          .collection('chats')
+          .add({
+        'text': message,
+        'senderId': widget.receiverId,
+        'timestamp': FieldValue.serverTimestamp(),
+      });
+
+      _messageController.clear();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Messages'),
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              controller: _scrollController,
+              reverse: true,
+              itemCount: _messages.length,
+              itemBuilder: (context, index) {
+                var message = _messages[index];
+                return ListTile(
+                  title: Text(message.text),
+                  subtitle: Text(message.senderId),
+                );
+              },
+            ),
+          ),
+          Divider(height: 1),
+          _buildMessageComposer(),
+        ],
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _messageController.dispose();
+    _scrollController.dispose();
+    super.dispose();
+  }
+}
