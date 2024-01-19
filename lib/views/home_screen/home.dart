@@ -22,7 +22,7 @@ class Home extends StatelessWidget {
       const HomeScreen(),
       const CategoryScreen(),
       const CartScreen(),
-      const ProfileScreen(),
+       ProfileScreen(),
     ];
 
 
