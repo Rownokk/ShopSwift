@@ -10,3 +10,4 @@ const slidersList=[imgSlider1,imgSlider2,imgSlider3,imgSlider4];
 const secondSlidersList=[imgSs1,imgSs2,imgSs3,imgSs4];
 const profileButtonList = [orders,wishlist,messages];
 const profileButtonsIcon =[icOrder,icOrder,icMessages];
+const itemDetailButtonList=[video,reviews,privacyPolicy,returnpolicy,supportPolicy];
