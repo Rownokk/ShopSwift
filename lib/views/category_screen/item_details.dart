@@ -9,7 +9,7 @@ class ItemDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: lightGrey,
+      backgroundColor: mediumPeachyPinkColor,
       appBar: AppBar(
         title: title!
             .text
@@ -36,18 +36,19 @@ class ItemDetails extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Item image
+            // Item details with background color
             Container(
               height: 200,
               width: double.infinity,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: NetworkImage(
-                    'https://i.pinimg.com/originals/b7/a6/12/b7a612ab5d54dc9a655ad4ab93acb85e.jpg',
+              color: Colors.blue, // Change this to your desired background color
+              child: Center(
+                child: Text(
+                  'No Image', // You can add a text or any other widget here
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.white, // Adjust text color as needed
                   ),
-                  fit: BoxFit.cover,
                 ),
-                borderRadius: BorderRadius.circular(8),
               ),
             ),
             const SizedBox(height: 16),
@@ -83,3 +84,4 @@ class ItemDetails extends StatelessWidget {
     );
   }
 }
+
