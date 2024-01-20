@@ -6,10 +6,36 @@ import 'package:emart_app/controller/profile_controller.dart';
 import 'package:emart_app/services/firebase_services.dart';
 import 'package:emart_app/views/auth_screen/login_screen.dart';
 import 'package:emart_app/views/profile_screen/components/details_card.dart';
-import 'package:emart_app/views/profile_screen/edit_profile_screen.dart';
 import 'package:emart_app/widgets_common/bg_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+
+
+class EditProfileScreen extends StatelessWidget {
+  final Map<String, dynamic> data;
+
+  EditProfileScreen({required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Edit Profile'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Edit Profile Screen'),
+            // You can use the data passed to this screen, for example:
+            Text('Name: ${data["name"]}'),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
 class ProfileScreen extends StatelessWidget {
   final ProfileController controller = Get.put(ProfileController());
@@ -39,10 +65,10 @@ class ProfileScreen extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          controller.nameController.text = data['name'] ?? '';
-                          controller.passController.text = data['password'] ?? '';
-                          Get.to(() => EditProfileScreen(data: data));
-                        },
+                controller.nameController.text = data['name'] ?? '';
+                controller.passController.text = data['password'] ?? '';
+                Get.to(() => EditProfileScreen(data:data.cast<String, dynamic>()));
+                },
                         child: Align(
                           alignment: Alignment.topRight,
                           child: Icon(Icons.edit, color: redColor),
@@ -117,7 +143,13 @@ class ProfileScreen extends StatelessWidget {
                               onTap: () {
                                 // Handle the button click to navigate to the messaging page
                                 // You can pass necessary data to the messaging page if needed
-                                Get.to(() => _MessagesPageState());
+                                Get.to(() => MessagesPage(
+                                  receiverId: "receiver_id_value",
+                                  // replace with the actual receiver id
+                                  deliveryManId: "delivery_man_id_value",
+                                  // replace with the actual delivery man id
+                                  chatRoomId: "chat_room_id_value", // replace with the actual chat room id
+                                ));
                               },
                               leading: Image.asset(profileButtonsIcon[index], width: 22),
                               title: profileButtonList[index].text.fontFamily(semibold).color(darkFontGrey).make(),
@@ -142,24 +174,10 @@ class ProfileScreen extends StatelessWidget {
   }
 }
 
-class ChatMessage {
-  final String id;
-  final String text;
-  final String senderId;
-  final DateTime timestamp;
-
-  ChatMessage({
-    required this.id,
-    required this.text,
-    required this.senderId,
-    required this.timestamp,
-  });
-}
-
 class MessagesPage extends StatefulWidget {
   final String receiverId;
   final String deliveryManId;
-  final String chatRoomId; // Pass _chatRoomId as a parameter
+  final String chatRoomId;
 
   MessagesPage({
     required this.receiverId,
@@ -189,7 +207,7 @@ class _MessagesPageState extends State<MessagesPage> {
   void _loadMessages() {
     FirebaseFirestore.instance
         .collection('messages')
-        .doc(widget.chatRoomId) // Use widget.chatRoomId instead of _chatRoomId
+        .doc(widget.chatRoomId)
         .collection('chats')
         .orderBy('timestamp', descending: true)
         .snapshots()
@@ -197,11 +215,18 @@ class _MessagesPageState extends State<MessagesPage> {
       setState(() {
         _messages = snapshot.docs.map((doc) {
           var data = doc.data() as Map<String, dynamic>;
+          var timestamp = data['timestamp'];
+
+          // Check if timestamp is not null before casting
+          DateTime? dateTime = timestamp != null
+              ? (timestamp is Timestamp ? timestamp.toDate() : null)
+              : null;
+
           return ChatMessage(
             id: doc.id,
             text: data['text'],
             senderId: data['senderId'],
-            timestamp: (data['timestamp'] as Timestamp).toDate(),
+            timestamp: dateTime ?? DateTime.now(), // Provide a default timestamp if null
           );
         }).toList();
       });
@@ -218,6 +243,7 @@ class _MessagesPageState extends State<MessagesPage> {
   Widget _buildMessageComposer() {
     return Container(
       padding: EdgeInsets.all(8.0),
+      color: Colors.black,
       child: Row(
         children: [
           Expanded(
@@ -227,7 +253,9 @@ class _MessagesPageState extends State<MessagesPage> {
               onSubmitted: _handleSendMessage,
               decoration: InputDecoration.collapsed(
                 hintText: 'Type a message',
+                hintStyle: TextStyle(color: Colors.white),
               ),
+              style: TextStyle(color: Colors.white),
             ),
           ),
           IconButton(
@@ -251,6 +279,19 @@ class _MessagesPageState extends State<MessagesPage> {
         'timestamp': FieldValue.serverTimestamp(),
       });
 
+      // Check if the sender is the receiver, then send an automatic reply
+      if (widget.receiverId == 'currentUserId') {
+        FirebaseFirestore.instance
+            .collection('messages')
+            .doc(widget.chatRoomId)
+            .collection('chats')
+            .add({
+          'text': 'Automatic reply: Your message has been received!',
+          'senderId': 'deliveryPersonId',
+          'timestamp': FieldValue.serverTimestamp(),
+        });
+      }
+
       _messageController.clear();
     }
   }
@@ -261,25 +302,38 @@ class _MessagesPageState extends State<MessagesPage> {
       appBar: AppBar(
         title: Text('Messages'),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              controller: _scrollController,
-              reverse: true,
-              itemCount: _messages.length,
-              itemBuilder: (context, index) {
-                var message = _messages[index];
-                return ListTile(
-                  title: Text(message.text),
-                  subtitle: Text(message.senderId),
-                );
-              },
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        color: Colors.white,
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                controller: _scrollController,
+                reverse: true,
+                itemCount: _messages.length,
+                itemBuilder: (context, index) {
+                  var message = _messages[index];
+                  return ListTile(
+                    title: Text(message.text),
+                    subtitle: Text(message.senderId),
+                    tileColor: message.senderId == widget.receiverId
+                        ? Colors.blue[100]
+                        : (message.senderId == widget.deliveryManId ? Colors.green[100] : null),
+                  );
+                },
+              ),
             ),
-          ),
-          Divider(height: 1),
-          _buildMessageComposer(),
-        ],
+            Divider(height: 1),
+            Container(
+              color: Colors.black,
+              padding: EdgeInsets.all(16.0),
+              child: _buildMessageComposer(),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -290,4 +344,18 @@ class _MessagesPageState extends State<MessagesPage> {
     _scrollController.dispose();
     super.dispose();
   }
+}
+
+class ChatMessage {
+  final String id;
+  final String text;
+  final String senderId;
+  final DateTime timestamp;
+
+  ChatMessage({
+    required this.id,
+    required this.text,
+    required this.senderId,
+    required this.timestamp,
+  });
 }
