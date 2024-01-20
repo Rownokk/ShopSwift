@@ -43,7 +43,7 @@ class CartScreen extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => CategoryScreen()),
                 );
               },
-              child: Text('Start Shopping'),
+              child: Text('Add To Your Cart'),
             ),
           ],
         ),
