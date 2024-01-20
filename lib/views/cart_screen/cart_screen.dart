@@ -1,4 +1,7 @@
+import 'package:emart_app/consts/strings.dart';
+import 'package:emart_app/views/category_screen/category_screen.dart';
 import 'package:flutter/material.dart';
+// Update with your actual project name
 
 class CartScreen extends StatelessWidget {
   const CartScreen({Key? key}) : super(key: key);
@@ -7,9 +10,12 @@ class CartScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Your\'s Cart',style: TextStyle( color: Colors.white),),
+        title: Text(
+          'Your Cart',
+          style: TextStyle(color: Colors.white),
+        ),
       ),
-      backgroundColor: Colors.pinkAccent, // Set background color for the entire screen
+      backgroundColor: Colors.pinkAccent,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -31,7 +37,11 @@ class CartScreen extends StatelessWidget {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                // Implement navigation or any action when the button is pressed
+                // Navigate to the category screen when the button is pressed
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CategoryScreen()),
+                );
               },
               child: Text('Start Shopping'),
             ),
@@ -49,4 +59,5 @@ void main() {
     ),
   );
 }
+
 
