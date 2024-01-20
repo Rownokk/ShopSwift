@@ -9,8 +9,23 @@ import 'package:emart_app/views/profile_screen/components/details_card.dart';
 import 'package:emart_app/widgets_common/bg_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'dart:math';
+void main() {
+  runApp(MyApp());
+}
 
-
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'My App',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: ProfileScreen(),
+    );
+  }
+}
 
 class EditProfileScreen extends StatelessWidget {
   final Map<String, dynamic> data;
@@ -28,7 +43,6 @@ class EditProfileScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text('Edit Profile Screen'),
-            // You can use the data passed to this screen, for example:
             Text('Name: ${data["name"]}'),
           ],
         ),
@@ -65,10 +79,10 @@ class ProfileScreen extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: () {
-                controller.nameController.text = data['name'] ?? '';
-                controller.passController.text = data['password'] ?? '';
-                Get.to(() => EditProfileScreen(data:data.cast<String, dynamic>()));
-                },
+                          controller.nameController.text = data['name'] ?? '';
+                          controller.passController.text = data['password'] ?? '';
+                          Get.to(() => EditProfileScreen(data: data.cast<String, dynamic>()));
+                        },
                         child: Align(
                           alignment: Alignment.topRight,
                           child: Icon(Icons.edit, color: redColor),
@@ -92,8 +106,8 @@ class ProfileScreen extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                "${data["name"]}".text.semiBold.color(Colors.red).make(),
-                                "${data['email']}".text.color(Colors.red).make(),
+                                "${data["name"]}".text.semiBold.color(Colors.indigoAccent).make(),
+                                "${data['email']}".text.color(Colors.indigoAccent).make(),
                               ],
                             ),
                           ),
@@ -126,7 +140,8 @@ class ProfileScreen extends StatelessWidget {
                               count: data['card_count']?.toString() ?? "0", title: "in your cart", width: context.screenWidth / 3.4),
                           detailsCard(
                               count: data['wishlist_count']?.toString() ?? "0", title: "in your wishlist", width: context.screenWidth / 3.4),
-                          detailsCard(count: data['order_count']?.toString() ?? "0", title: "your orders", width: context.screenWidth / 3.4),
+                          detailsCard(
+                              count: data['order_count']?.toString() ?? "0", title: "your orders", width: context.screenWidth / 3.4),
                         ],
                       ),
                       40.heightBox,
@@ -141,14 +156,10 @@ class ProfileScreen extends StatelessWidget {
                           if (profileButtonList[index] == "Messages") {
                             return ListTile(
                               onTap: () {
-                                // Handle the button click to navigate to the messaging page
-                                // You can pass necessary data to the messaging page if needed
                                 Get.to(() => MessagesPage(
                                   receiverId: "receiver_id_value",
-                                  // replace with the actual receiver id
                                   deliveryManId: "delivery_man_id_value",
-                                  // replace with the actual delivery man id
-                                  chatRoomId: "chat_room_id_value", // replace with the actual chat room id
+                                  chatRoomId: "chat_room_id_value",
                                 ));
                               },
                               leading: Image.asset(profileButtonsIcon[index], width: 22),
@@ -217,7 +228,6 @@ class _MessagesPageState extends State<MessagesPage> {
           var data = doc.data() as Map<String, dynamic>;
           var timestamp = data['timestamp'];
 
-          // Check if timestamp is not null before casting
           DateTime? dateTime = timestamp != null
               ? (timestamp is Timestamp ? timestamp.toDate() : null)
               : null;
@@ -226,12 +236,11 @@ class _MessagesPageState extends State<MessagesPage> {
             id: doc.id,
             text: data['text'],
             senderId: data['senderId'],
-            timestamp: dateTime ?? DateTime.now(), // Provide a default timestamp if null
+            timestamp: dateTime ?? DateTime.now(),
           );
         }).toList();
       });
 
-      // Scroll to the latest message
       _scrollController.animateTo(
         _scrollController.position.maxScrollExtent,
         duration: Duration(milliseconds: 300),
@@ -243,7 +252,7 @@ class _MessagesPageState extends State<MessagesPage> {
   Widget _buildMessageComposer() {
     return Container(
       padding: EdgeInsets.all(8.0),
-      color: Colors.black,
+      color: Colors.transparent,
       child: Row(
         children: [
           Expanded(
@@ -253,9 +262,9 @@ class _MessagesPageState extends State<MessagesPage> {
               onSubmitted: _handleSendMessage,
               decoration: InputDecoration.collapsed(
                 hintText: 'Type a message',
-                hintStyle: TextStyle(color: Colors.white),
+                hintStyle: TextStyle(color: Colors.black),
               ),
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(color: Colors.black),
             ),
           ),
           IconButton(
@@ -279,21 +288,31 @@ class _MessagesPageState extends State<MessagesPage> {
         'timestamp': FieldValue.serverTimestamp(),
       });
 
-      // Check if the sender is the receiver, then send an automatic reply
-      if (widget.receiverId == 'currentUserId') {
-        FirebaseFirestore.instance
-            .collection('messages')
-            .doc(widget.chatRoomId)
-            .collection('chats')
-            .add({
-          'text': 'Automatic reply: Your message has been received!',
-          'senderId': 'deliveryPersonId',
-          'timestamp': FieldValue.serverTimestamp(),
-        });
-      }
+      _sendAutoReply();
 
       _messageController.clear();
     }
+  }
+
+  void _sendAutoReply() {
+    final List<String> autoReplies = [
+      'Delivery Boy: Your message has been received!',
+      'Delivery Boy: Thank you for reaching out!',
+      'Delivery Boy: We appreciate your inquiry!',
+    ];
+
+    final random = Random.secure();
+    final randomIndex = random.nextInt(autoReplies.length);
+
+    FirebaseFirestore.instance
+        .collection('messages')
+        .doc(widget.chatRoomId)
+        .collection('chats')
+        .add({
+      'text': autoReplies[randomIndex],
+      'senderId': widget.deliveryManId,
+      'timestamp': FieldValue.serverTimestamp(),
+    });
   }
 
   @override
@@ -303,9 +322,7 @@ class _MessagesPageState extends State<MessagesPage> {
         title: Text('Messages'),
       ),
       body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        color: Colors.white,
+        color: Colors.transparent,
         padding: EdgeInsets.all(16.0),
         child: Column(
           children: [
@@ -328,7 +345,7 @@ class _MessagesPageState extends State<MessagesPage> {
             ),
             Divider(height: 1),
             Container(
-              color: Colors.black,
+              color: Colors.white,
               padding: EdgeInsets.all(16.0),
               child: _buildMessageComposer(),
             ),
@@ -359,3 +376,4 @@ class ChatMessage {
     required this.timestamp,
   });
 }
+
