@@ -119,7 +119,7 @@ class ProfileScreen extends StatelessWidget {
                             ),
                             onPressed: () {
                               Get.put(AuthController()).signoutMethod(context);
-                              Get.offAll(() => const LoginScreen());
+                              Get.offAll(() =>  LoginScreen());
                             },
                             child: Text(
                               'Logout',

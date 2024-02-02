@@ -110,7 +110,6 @@ class NotificationHandler {
   }
 }
 
-
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -134,45 +133,3 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class YourHomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Your App'),
-      ),
-      body: Center(
-        child: Text('Welcome to your app!'),
-      ),
-    );
-  }
-}
-
-class NotificationDialog extends StatelessWidget {
-  final String? title;
-  final String? body;
-
-  NotificationDialog({this.title, this.body});
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text(title ?? 'Notification'),
-      content: Text(body ?? 'Notification Body'),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop(true); // User clicked 'Yes'
-          },
-          child: Text('Yes'),
-        ),
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop(false); // User clicked 'No'
-          },
-          child: Text('No'),
-        ),
-      ],
-    );
-  }
-}
