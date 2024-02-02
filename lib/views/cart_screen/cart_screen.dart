@@ -1,61 +1,171 @@
-import 'package:emart_app/consts/colors.dart';
-import 'package:emart_app/consts/strings.dart';
-import 'package:emart_app/views/category_screen/category_screen.dart';
-//import 'package:emart_app/views/payment_screen/payment_screen.dart'; // Import the payment screen/page
 import 'package:flutter/material.dart';
 
-class CartScreen extends StatelessWidget {
+class CartScreen extends StatefulWidget {
   const CartScreen({Key? key}) : super(key: key);
+
+  @override
+  _CartScreenState createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> {
+  final List<CartItem> cartItems = [
+    CartItem(name: 'Item 1', price: 20.0, quantity: 2),
+    CartItem(name: 'Item 2', price: 15.0, quantity: 1),
+    // Add more items as needed
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Your Cart',
-          style: TextStyle(color: redColor),
-        ),
+        title: Text('Your Cart'),
+        backgroundColor: Colors.pinkAccent,
       ),
-      backgroundColor: mediumPeachyPinkColor,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.shopping_cart,
-              size: 100,
-              color: redColor,
+      backgroundColor: Colors.white,
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: cartItems.length,
+              itemBuilder: (context, index) {
+                return CartItemWidget(
+                  cartItem: cartItems[index],
+                  onIncrease: () {
+                    setState(() {
+                      cartItems[index].quantity++;
+                    });
+                  },
+                  onDecrease: () {
+                    setState(() {
+                      if (cartItems[index].quantity > 1) {
+                        cartItems[index].quantity--;
+                      }
+                    });
+                  },
+                  onRemove: () {
+                    setState(() {
+                      cartItems.removeAt(index);
+                    });
+                  },
+                );
+              },
             ),
-            SizedBox(height: 20),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  'Total Price: \$${calculateTotalPrice()}',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    // Implement Checkout logic here
+                    // For demonstration, let's navigate to a payment screen
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => PaymentScreen()),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(primary: Colors.pinkAccent),
+                  child: Text('Proceed to Payment', style: TextStyle(color: Colors.white)),
+                ),
+                SizedBox(height: 10),
+                ElevatedButton(
+                  onPressed: () {
+                    // Implement Continue Shopping logic here
+                    Navigator.pop(context);
+                  },
+                  style: ElevatedButton.styleFrom(primary: Colors.pinkAccent),
+                  child: Text('Continue Shopping', style: TextStyle(color: Colors.white)),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  double calculateTotalPrice() {
+    double total = 0.0;
+    for (var item in cartItems) {
+      total += item.price * item.quantity;
+    }
+    return total;
+  }
+}
+
+class CartItem {
+  final String name;
+  final double price;
+  int quantity;
+
+  CartItem({
+    required this.name,
+    required this.price,
+    required this.quantity,
+  });
+}
+
+class CartItemWidget extends StatelessWidget {
+  final CartItem cartItem;
+  final VoidCallback onIncrease;
+  final VoidCallback onDecrease;
+  final VoidCallback onRemove;
+
+  CartItemWidget({
+    required this.cartItem,
+    required this.onIncrease,
+    required this.onDecrease,
+    required this.onRemove,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: EdgeInsets.all(8.0),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
             Text(
-              'Your Cart is Empty',
+              cartItem.name,
               style: TextStyle(
-                color: redColor,
-                fontSize: 20,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
               ),
             ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Navigate to the category screen when the button is pressed
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => CategoryScreen()),
-                );
-              },
-              child: Text('Add To Your Cart',style: TextStyle(color: redColor)),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Navigate to the payment screen when the button is pressed
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => PaymentScreen()),
-                );
-              },
-              child: Text('Tap For Payment',style: TextStyle(color: redColor)),
+            SizedBox(height: 5),
+            Text('\$${cartItem.price}', style: TextStyle(color: Colors.black)),
+            SizedBox(height: 5),
+            Row(
+              children: [
+                IconButton(
+                  onPressed: onDecrease,
+                  icon: Icon(Icons.remove),
+                ),
+                Text('${cartItem.quantity}', style: TextStyle(color: Colors.black)),
+                IconButton(
+                  onPressed: onIncrease,
+                  icon: Icon(Icons.add),
+                ),
+                Spacer(),
+                IconButton(
+                  onPressed: onRemove,
+                  icon: Icon(Icons.delete),
+                ),
+              ],
             ),
           ],
         ),
@@ -64,17 +174,16 @@ class CartScreen extends StatelessWidget {
   }
 }
 
-// payment_screen.dart
-
-
 class PaymentScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // Implement your payment screen UI here
     return Scaffold(
       appBar: AppBar(
-        title: Text('Payment',style: TextStyle(color: redColor)),
+        title: Text('Payment'),
+        backgroundColor: Colors.pinkAccent,
       ),
-      backgroundColor: mediumPeachyPinkColor,
+      backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -83,101 +192,16 @@ class PaymentScreen extends StatelessWidget {
           children: [
             Text(
               'Choose a Payment Method:',
-              style: TextStyle(fontSize: 20, color: redColor),
+              style: TextStyle(fontSize: 20, color: Colors.black),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Implement PayPal payment logic here
-                handlePayment(context, 'PayPal');
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.network('https://images.creativemarket.com/0.1.0/ps/3763165/1820/1466/m1/fpnw/wm1/mtgy1denzgfzalhgrid4iy5x4renf7tkhif3ubjzqkmclmvz5vo1gavoyxqht5tp-.jpg?1513841434&s=01514747aae43172b41e61b357ccbbbe', height: 30, width: 30),
-                  SizedBox(width: 10),
-                  Text('Pay with PayPal',style: TextStyle(color: redColor),),
-                ],
-              ),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Implement Debit Card payment logic here
-                handlePayment(context, 'Debit Card');
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.network('https://images.creativemarket.com/0.1.0/ps/3763165/1820/1466/m1/fpnw/wm1/mtgy1denzgfzalhgrid4iy5x4renf7tkhif3ubjzqkmclmvz5vo1gavoyxqht5tp-.jpg?1513841434&s=01514747aae43172b41e61b357ccbbbe', height: 30, width: 30),
-                  SizedBox(width: 10),
-                  Text('Pay with Debit Card',style: TextStyle(color: redColor)),
-                ],
-              ),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Implement Credit Card payment logic here
-                handlePayment(context, 'Credit Card');
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.network('https://images.creativemarket.com/0.1.0/ps/3763165/1820/1466/m1/fpnw/wm1/mtgy1denzgfzalhgrid4iy5x4renf7tkhif3ubjzqkmclmvz5vo1gavoyxqht5tp-.jpg?1513841434&s=01514747aae43172b41e61b357ccbbbe', height: 30, width: 30),
-                  SizedBox(width: 10),
-                  Text('Pay with Credit Card',style: TextStyle(color: redColor)),
-                ],
-              ),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Implement Cash on Delivery payment logic here
-                handlePayment(context, 'Cash on Delivery');
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.network('https://images.creativemarket.com/0.1.0/ps/3763165/1820/1466/m1/fpnw/wm1/mtgy1denzgfzalhgrid4iy5x4renf7tkhif3ubjzqkmclmvz5vo1gavoyxqht5tp-.jpg?1513841434&s=01514747aae43172b41e61b357ccbbbe', height: 30, width: 30),
-                  SizedBox(width: 10),
-                  Text('Cash on Delivery',style: TextStyle(color: redColor)),
-                ],
-              ),
-            ),
+            // Add your payment options here
           ],
         ),
       ),
     );
   }
-
-  void handlePayment(BuildContext context, String paymentMethod) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Payment Result',style: TextStyle(color: redColor)),
-          content: Text('Payment successful with $paymentMethod!',style: TextStyle(color: redColor)), // You can customize this message
-          actions: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('OK',style: TextStyle(color: redColor)),
-            ),
-          ],
-        );
-      },
-    );
-  }
 }
-
-
-
-
-
-
 
 void main() {
   runApp(
@@ -186,11 +210,3 @@ void main() {
     ),
   );
 }
-
-
-
-
-
-
-
-
