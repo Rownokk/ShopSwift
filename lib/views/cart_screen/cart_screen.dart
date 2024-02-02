@@ -1,5 +1,13 @@
 import 'package:flutter/material.dart';
 
+void main() {
+  runApp(
+    MaterialApp(
+      home: CartScreen(),
+    ),
+  );
+}
+
 class CartScreen extends StatefulWidget {
   const CartScreen({Key? key}) : super(key: key);
 
@@ -8,7 +16,7 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-  final List<CartItem> cartItems = [
+  List<CartItem> cartItems = [
     CartItem(name: 'Item 1', price: 20.0, quantity: 2),
     CartItem(name: 'Item 2', price: 15.0, quantity: 1),
     // Add more items as needed
@@ -68,8 +76,6 @@ class _CartScreenState extends State<CartScreen> {
                 SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
-                    // Implement Checkout logic here
-                    // For demonstration, let's navigate to a payment screen
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => PaymentScreen()),
@@ -177,7 +183,6 @@ class CartItemWidget extends StatelessWidget {
 class PaymentScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Implement your payment screen UI here
     return Scaffold(
       appBar: AppBar(
         title: Text('Payment'),
@@ -192,21 +197,69 @@ class PaymentScreen extends StatelessWidget {
           children: [
             Text(
               'Choose a Payment Method:',
-              style: TextStyle(fontSize: 20, color: Colors.black),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
               textAlign: TextAlign.center,
             ),
-            // Add your payment options here
+            SizedBox(height: 20),
+            PaymentMethodOption(
+              title: 'bKash',
+              onPressed: () => handlePayment(context, 'bKash'),
+            ),
+            SizedBox(height: 20),
+            PaymentMethodOption(
+              title: 'Nagad',
+              onPressed: () => handlePayment(context, 'Nagad'),
+            ),
+            SizedBox(height: 20),
+            PaymentMethodOption(
+              title: 'Cash on Delivery',
+              onPressed: () => handlePayment(context, 'Cash on Delivery'),
+            ),
           ],
         ),
       ),
     );
   }
+
+  void handlePayment(BuildContext context, String paymentMethod) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Payment Result'),
+          content: Text('Payment successful with $paymentMethod!'),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
 
-void main() {
-  runApp(
-    MaterialApp(
-      home: CartScreen(),
-    ),
-  );
+class PaymentMethodOption extends StatelessWidget {
+  final String title;
+  final VoidCallback onPressed;
+
+  PaymentMethodOption({
+    required this.title,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(primary: Colors.yellowAccent),
+      child: Text(
+        title,
+        style: TextStyle(color: Colors.black),
+      ),
+    );
+  }
 }
