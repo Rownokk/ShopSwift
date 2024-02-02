@@ -1,18 +1,28 @@
 import 'package:emart_app/consts/consts.dart';
 import 'package:emart_app/consts/lists.dart';
 import 'package:emart_app/widgets_common/our_button.dart';
-class ItemDetails extends StatelessWidget {
+import 'package:flutter/material.dart';
+import 'package:velocity_x/velocity_x.dart';
+import 'package:emart_app/views/cart_screen//cart_screen.dart';
+
+class ItemDetails extends StatefulWidget {
   final String? title;
 
   const ItemDetails({Key? key, required this.title}) : super(key: key);
 
+  @override
+  _ItemDetailsState createState() => _ItemDetailsState();
+}
+
+class _ItemDetailsState extends State<ItemDetails> {
+  int quantity = 1;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: lightGrey,
       appBar: AppBar(
-        title: title!.text.color(darkFontGrey).fontFamily(bold).make(),
+        title: widget.title!.text.color(darkFontGrey).fontFamily(bold).make(),
         actions: [
           IconButton(
             onPressed: () {},
@@ -33,151 +43,102 @@ class ItemDetails extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
-              child:Padding(
-                padding: const EdgeInsets.all(8),
-                child:SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      VxSwiper.builder(
-                          autoPlay: true,
-                          height: 350,
-                          itemCount: 3,
-                          aspectRatio: 16/9,
-                          itemBuilder: (context,index){
-                            return Image.asset(
-                              imgFc5,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                            );
-                          }),
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // ... existing code
 
-                      10.heightBox,
-                      title!.text.size(16).color(darkFontGrey).fontFamily(semibold).make(),
-                      10.heightBox,
-                      VxRating(
-                          onRatingUpdate: (value){},
+                    // Quantity selection
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        "Quantity:".text.color(Colors.black).make(),
+                        Row(
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                if (quantity > 1) {
+                                  setState(() {
+                                    quantity--;
+                                  });
+                                }
+                              },
+                              icon: const Icon(Icons.remove),
+                            ),
+                            quantity.toString().text.size(16).color(darkFontGrey).fontFamily(bold).make(),
+                            IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  quantity++;
+                                });
+                              },
+                              icon: const Icon(Icons.add),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ).box.padding(const EdgeInsets.all(8)).make(),
+
+                    // Star rating
+                    Row(
+                      children: [
+                        "Rating:".text.color(Colors.black).make(),
+                        VxRating(
+                          onRatingUpdate: (value) {
+                            // Handle rating update
+                          },
                           normalColor: textfieldGrey,
                           selectionColor: golden,
                           count: 5,
                           size: 25,
-                          stepInt: true),
-                      10.heightBox,
-                      "\$30,000".text.color(redColor).fontFamily(bold).size(18).make(),
-                      10.heightBox,
-                      Row(
-                        children: [
-                          Expanded(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment:CrossAxisAlignment.start,
-                                children: [
-                                  "Seller".text.white.fontFamily(semibold).make(),
-                                  5.heightBox,
-                                  "In House Brands".text.fontFamily(semibold).color(darkFontGrey).size(16).make(),
-                                ],
-                              )),
-                          Column(),
-                          CircleAvatar(
-                            backgroundColor: Colors.white,
-                            child: Icon(Icons.message_rounded,color: darkFontGrey),
-                          ),
-                        ],
-                      ).box.height(60).padding(EdgeInsets.symmetric(horizontal: 16)).color(textfieldGrey).make(),
-                      20.heightBox,
-                      Column(
-                        children: [
-                          Row(
-                            children: [
-                              SizedBox(
-                                width: 100,
-                                child: "Color:".text.color(Colors.black).make(),
-                              ),
-                              Row(
-                                children: List.generate(
-                                  3,
-                                      (index) => VxBox()
-                                      .size(40, 40)
-                                      .roundedFull
-                                      .color(Vx.randomPrimaryColor)
-                                      .margin(EdgeInsets.symmetric(horizontal: 6))
-                                      .make(),
-                                ),
-                              ),
+                          stepInt: true,
+                        ),
+                      ],
+                    ).box.padding(const EdgeInsets.all(8)).make(),
 
-                            ],
-                          ).box.padding(EdgeInsets.all(8)).make(),
-                          Row(
-                            children: [
-                              SizedBox(
-                                width: 100,
-                                child: "Quantity".text.color(Colors.black).make(),
-                              ),
-                              Row(
-                                children: [
-                                  IconButton(onPressed: (){}, icon: const Icon(Icons.remove)),
-                                  "0".text.size(16).color(darkFontGrey).fontFamily(bold).make(),
-                                  IconButton(onPressed: (){}, icon: const Icon(Icons.add)),
-                                  10.widthBox,
-                                  "(0 available)".text.color(Colors.black).make(),
-                                ],
-                              ),
-                            ],
-                          ).box.padding(const EdgeInsets.all(8)).make(),
-                          Row(
-                            children: [
-                              SizedBox(
-                                width: 100,
-                                child: "Total price".text.color(Colors.black).make(),
-                              ),
-                              "\$0.00".text.color(redColor).size(16).fontFamily(bold).make(),
-                            ],
-                          ).box.padding(const EdgeInsets.all(8)).make(),
-                        ],
-                      ).box.white.shadowSm.make(),
-                      //description section
-                      10.heightBox,
-                      "Description".text.color(Colors.black).fontFamily(semibold).make(),
-                      10.heightBox,
-                      "This is dummy item and dummy description here...".text.color(Colors.black).make(),
-                      10.heightBox,
-                      ListView(
-                        physics: NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        children: List.generate(
-                          itemDetailButtonList.length,
-                              (index) => ListTile(
-                            title: itemDetailButtonList[index].text.fontFamily(semibold).color(darkFontGrey).make(),
-                            trailing: Icon(Icons.arrow_forward),
-                          ),),
+                    // Additional details
+                    ExpansionTile(
+                      title: Text(
+                        "Product Details",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
                       ),
-                      //product you may like section
-                      20.heightBox,
-                      productsyoumaylike.text
-                          .fontFamily(bold)
-                          .size(16)
-                          .color(Colors.black)
-                          .make(),
+                      children: [
+                        // Implement additional product details here
+                        // Example: Product specifications, dimensions, etc.
+                      ],
+                    ),
 
-
-                    ],
-                  ),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 60,
+                      child: ourButton(
+                        color: redColor,
+                        onPress: () {
+                          // Handle adding item to the cart
+                          // For demonstration, let's navigate to CartScreen
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => CartScreen()),
+                          );
+                        },
+                        textColor: whiteColor,
+                        title: "Add to cart",
+                      ),
+                    ),
+                  ],
                 ),
-              )),
-          SizedBox(
-            width: double.infinity,
-            height: 60,
-            child: ourButton(
-                color: redColor,
-                onPress: (){},
-                textColor: whiteColor,
-                title: "Add to cart"
+              ),
             ),
-
           ),
         ],
       ),
-
     );
   }
 }
