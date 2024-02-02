@@ -106,8 +106,8 @@ class ProfileScreen extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                "${data["name"]}".text.semiBold.color(Colors.indigoAccent).make(),
-                                "${data['email']}".text.color(Colors.indigoAccent).make(),
+                                "${data["name"]}".text.semiBold.color(Colors.pinkAccent).make(),
+                                "${data['email']}".text.color(Colors.pinkAccent).make(),
                               ],
                             ),
                           ),
