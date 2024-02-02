@@ -51,6 +51,7 @@ class CategoryDetails extends StatelessWidget {
         break;
     }
 
+
     return bgWidget(
       child: Scaffold(
         appBar: AppBar(
@@ -70,9 +71,13 @@ class CategoryDetails extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: categories.map((categoryText) {
                         return GestureDetector(
-                          onTap: () {
-                            Get.to(() => BarsDetails(category: categoryText, backgroundColor: Colors.transparent));
-                          },
+
+                        onTap: () {
+                          Get.to(() => BarsDetails(
+                            category: categoryText,
+                            backgroundColor: Colors.transparent,
+                          ));
+                        },
                           child: categoryText
                               .text
                               .size(24)
@@ -101,9 +106,11 @@ class CategoryDetails extends StatelessWidget {
   }
 }
 
+
 class BarsDetails extends StatelessWidget {
   final String category;
   final Color backgroundColor;
+
 
   const BarsDetails({Key? key, required this.category, required this.backgroundColor}) : super(key: key);
 
@@ -1323,59 +1330,68 @@ class BarsDetails extends StatelessWidget {
                 shrinkWrap: true,
                 itemCount: categoryData[category]!.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, // Adjust this value based on your design and screen width
+                  crossAxisCount: 2,
                   mainAxisSpacing: 16,
                   crossAxisSpacing: 16,
-                  mainAxisExtent: 400, // Adjust this value to control the box size
+                  mainAxisExtent: 400,
                 ),
                 itemBuilder: (context, index) {
-                  String itemName = categoryData[category]![index]["name"];
-                  String itemPrice = categoryData[category]![index]["price"];
-                  String itemImage = categoryData[category]![index]["image"];
+    String itemName = categoryData[category]![index]["name"];
+    String itemPrice = categoryData[category]![index]["price"];
+    String itemImage = categoryData[category]![index]["image"];
 
-                  return GestureDetector(
-                    onTap: () {
-                      // Handle item tap
-                    },
-                    child: Container(
-                      width: double.infinity,
-                      color: backgroundColor,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(16),
-                            child: Image.network(
-                              itemImage,
-                              height: 240,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          16.heightBox,
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 12),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                itemName.text.fontFamily(semibold).color(
-                                    darkFontGrey).size(18).make(),
-                                8.heightBox,
-                                "$itemPrice".text.color(redColor).fontFamily(
-                                    bold).size(16).make(),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ).box
-                        .white
-                        .margin(const EdgeInsets.symmetric(horizontal: 8))
-                        .roundedSM
-                        .outerShadowSm
-                        .padding(const EdgeInsets.all(16))
-                        .make(),
-                  );
+
+    // Navigate to ItemDetails page with the selected item details
+    return GestureDetector(
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ItemDetails(
+            title: itemName, // Set your desired title
+          ),
+        ),
+      );
+    },
+    child: Container(
+    width: double.infinity,
+    color: backgroundColor,
+    child: Column(
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+    ClipRRect(
+    borderRadius: BorderRadius.circular(16),
+    child: Image.network(
+    itemImage,
+    height: 240,
+    width: double.infinity,
+    fit: BoxFit.cover,
+    ),
+    ),
+    16.heightBox,
+    Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 12),
+    child: Column(
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+    itemName.text.fontFamily(semibold).color(
+    darkFontGrey).size(18).make(),
+    8.heightBox,
+    "$itemPrice".text.color(redColor).fontFamily(
+    bold).size(16).make(),
+    ],
+    ),
+    ),
+    ],
+    ),
+    ).box
+        .white
+        .margin(const EdgeInsets.symmetric(horizontal: 8))
+        .roundedSM
+        .outerShadowSm
+        .padding(const EdgeInsets.all(16))
+        .make(),
+    );
                 },
               ),
             ),
