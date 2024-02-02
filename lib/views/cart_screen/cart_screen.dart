@@ -13,10 +13,10 @@ class CartScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'Your Cart',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: redColor),
         ),
       ),
-      backgroundColor: Colors.pinkAccent,
+      backgroundColor: mediumPeachyPinkColor,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -25,13 +25,13 @@ class CartScreen extends StatelessWidget {
             Icon(
               Icons.shopping_cart,
               size: 100,
-              color: Colors.white,
+              color: redColor,
             ),
             SizedBox(height: 20),
             Text(
               'Your Cart is Empty',
               style: TextStyle(
-                color: Colors.white,
+                color: redColor,
                 fontSize: 20,
               ),
             ),
@@ -44,7 +44,7 @@ class CartScreen extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => CategoryScreen()),
                 );
               },
-              child: Text('Add To Your Cart'),
+              child: Text('Add To Your Cart',style: TextStyle(color: redColor)),
             ),
             SizedBox(height: 20),
             ElevatedButton(
@@ -55,7 +55,7 @@ class CartScreen extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => PaymentScreen()),
                 );
               },
-              child: Text('Payment'),
+              child: Text('Tap For Payment',style: TextStyle(color: redColor)),
             ),
           ],
         ),
@@ -72,9 +72,9 @@ class PaymentScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Payment'),
+        title: Text('Payment',style: TextStyle(color: redColor)),
       ),
-      backgroundColor: Colors.pinkAccent,
+      backgroundColor: mediumPeachyPinkColor,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -83,7 +83,7 @@ class PaymentScreen extends StatelessWidget {
           children: [
             Text(
               'Choose a Payment Method:',
-              style: TextStyle(fontSize: 20, color: Colors.white),
+              style: TextStyle(fontSize: 20, color: redColor),
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 20),
@@ -97,7 +97,7 @@ class PaymentScreen extends StatelessWidget {
                 children: [
                   Image.network('https://images.creativemarket.com/0.1.0/ps/3763165/1820/1466/m1/fpnw/wm1/mtgy1denzgfzalhgrid4iy5x4renf7tkhif3ubjzqkmclmvz5vo1gavoyxqht5tp-.jpg?1513841434&s=01514747aae43172b41e61b357ccbbbe', height: 30, width: 30),
                   SizedBox(width: 10),
-                  Text('Pay with PayPal'),
+                  Text('Pay with PayPal',style: TextStyle(color: redColor),),
                 ],
               ),
             ),
@@ -112,7 +112,7 @@ class PaymentScreen extends StatelessWidget {
                 children: [
                   Image.network('https://images.creativemarket.com/0.1.0/ps/3763165/1820/1466/m1/fpnw/wm1/mtgy1denzgfzalhgrid4iy5x4renf7tkhif3ubjzqkmclmvz5vo1gavoyxqht5tp-.jpg?1513841434&s=01514747aae43172b41e61b357ccbbbe', height: 30, width: 30),
                   SizedBox(width: 10),
-                  Text('Pay with Debit Card'),
+                  Text('Pay with Debit Card',style: TextStyle(color: redColor)),
                 ],
               ),
             ),
@@ -127,7 +127,7 @@ class PaymentScreen extends StatelessWidget {
                 children: [
                   Image.network('https://images.creativemarket.com/0.1.0/ps/3763165/1820/1466/m1/fpnw/wm1/mtgy1denzgfzalhgrid4iy5x4renf7tkhif3ubjzqkmclmvz5vo1gavoyxqht5tp-.jpg?1513841434&s=01514747aae43172b41e61b357ccbbbe', height: 30, width: 30),
                   SizedBox(width: 10),
-                  Text('Pay with Credit Card'),
+                  Text('Pay with Credit Card',style: TextStyle(color: redColor)),
                 ],
               ),
             ),
@@ -142,7 +142,7 @@ class PaymentScreen extends StatelessWidget {
                 children: [
                   Image.network('https://images.creativemarket.com/0.1.0/ps/3763165/1820/1466/m1/fpnw/wm1/mtgy1denzgfzalhgrid4iy5x4renf7tkhif3ubjzqkmclmvz5vo1gavoyxqht5tp-.jpg?1513841434&s=01514747aae43172b41e61b357ccbbbe', height: 30, width: 30),
                   SizedBox(width: 10),
-                  Text('Cash on Delivery'),
+                  Text('Cash on Delivery',style: TextStyle(color: redColor)),
                 ],
               ),
             ),
@@ -157,14 +157,14 @@ class PaymentScreen extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Payment Result'),
-          content: Text('Payment successful with $paymentMethod!'), // You can customize this message
+          title: Text('Payment Result',style: TextStyle(color: redColor)),
+          content: Text('Payment successful with $paymentMethod!',style: TextStyle(color: redColor)), // You can customize this message
           actions: [
             ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('OK'),
+              child: Text('OK',style: TextStyle(color: redColor)),
             ),
           ],
         );
