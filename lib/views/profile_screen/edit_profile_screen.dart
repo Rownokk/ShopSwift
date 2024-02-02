@@ -1,8 +1,20 @@
 import 'dart:io';
-
+import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emart_app/consts/consts.dart';
+import 'package:emart_app/consts/lists.dart';
+import 'package:emart_app/controller/auth_controller.dart';
 import 'package:emart_app/controller/profile_controller.dart';
+import 'package:emart_app/services/firebase_services.dart';
+import 'package:emart_app/views/auth_screen/login_screen.dart';
+import 'package:emart_app/views/profile_screen/components/details_card.dart';
 import 'package:emart_app/widgets_common/bg_widget.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'dart:math';
+
+import 'package:emart_app/controller/profile_controller.dart';
+
 import 'package:emart_app/widgets_common/custom_textfield.dart';
 import 'package:emart_app/widgets_common/our_button.dart';
 import 'package:get/get.dart';
