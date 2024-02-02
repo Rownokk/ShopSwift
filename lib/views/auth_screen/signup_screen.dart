@@ -1,7 +1,9 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/get.dart';
+import 'package:velocity_x/velocity_x.dart';
 import 'package:emart_app/controller/auth_controller.dart';
 import 'package:emart_app/views/home_screen/home.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import '../../consts/colors.dart';
 import '../../consts/consts.dart';
 import '../../widgets_common/applogo_widget.dart';
@@ -10,7 +12,7 @@ import '../../widgets_common/custom_textfield.dart';
 import '../../widgets_common/our_button.dart';
 
 class SignupScreen extends StatefulWidget {
-  const SignupScreen({Key? key}) :super(key: key);
+  const SignupScreen({Key? key}) : super(key: key);
 
   @override
   State<SignupScreen> createState() => _SignupScreenState();
@@ -18,11 +20,52 @@ class SignupScreen extends StatefulWidget {
 
 class _SignupScreenState extends State<SignupScreen> {
   bool? isCheck = false;
- var contoller=Get.put(AuthController());
- var nameController= TextEditingController();
-  var emailController= TextEditingController();
-  var passwordController= TextEditingController();
-  var passwordRetypeController= TextEditingController();
+  var contoller = Get.put(AuthController());
+  var nameController = TextEditingController();
+  var emailController = TextEditingController();
+  var passwordController = TextEditingController();
+  var passwordRetypeController = TextEditingController();
+
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+  FlutterLocalNotificationsPlugin();
+
+  @override
+  void initState() {
+    super.initState();
+    initializeNotifications();
+  }
+
+  Future<void> initializeNotifications() async {
+    final AndroidInitializationSettings initializationSettingsAndroid =
+    AndroidInitializationSettings('@mipmap/ic_launcher');
+
+    final InitializationSettings initializationSettings =
+    InitializationSettings(android: initializationSettingsAndroid);
+
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  }
+
+  Future<void> showNotification(String title, String body) async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+    AndroidNotificationDetails(
+      'your_channel_id', 'Your channel name',
+      //'Your channel description',
+      importance: Importance.max,
+      priority: Priority.high,
+    );
+
+    const NotificationDetails platformChannelSpecifics =
+    NotificationDetails(android: androidPlatformChannelSpecifics);
+
+    await flutterLocalNotificationsPlugin.show(
+      0, // Notification ID
+      title,
+      body,
+      platformChannelSpecifics,
+      payload: 'item x',
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return bgWidget(
@@ -40,12 +83,29 @@ class _SignupScreenState extends State<SignupScreen> {
                   .size(18)
                   .make(),
               15.heightBox,
-              Obx(()=> Column(
+              Obx(
+                    () => Column(
                   children: [
-                    customTextField(hint: nameHint, title: name,controller: nameController,isPass: false),
-                    customTextField(hint: emailHint, title: email,controller: emailController,isPass:false),
-                    customTextField(hint: passwordHint, title: password,controller: passwordController,isPass:true),
-                    customTextField(hint: passwordHint, title: retypePassword,controller: passwordRetypeController,isPass:true),
+                    customTextField(
+                        hint: nameHint,
+                        title: name,
+                        controller: nameController,
+                        isPass: false),
+                    customTextField(
+                        hint: emailHint,
+                        title: email,
+                        controller: emailController,
+                        isPass: false),
+                    customTextField(
+                        hint: passwordHint,
+                        title: password,
+                        controller: passwordController,
+                        isPass: true),
+                    customTextField(
+                        hint: passwordHint,
+                        title: retypePassword,
+                        controller: passwordRetypeController,
+                        isPass: true),
                     Align(
                       alignment: Alignment.centerRight,
                       child: TextButton(
@@ -105,31 +165,53 @@ class _SignupScreenState extends State<SignupScreen> {
                       ],
                     ),
                     5.heightBox,
-                    contoller.isloading.value? const CircularProgressIndicator(
+                    contoller.isloading.value
+                        ? const CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation(redColor),
-                    ):
-                    ourButton(
+                    )
+                        : ourButton(
                       color: isCheck == true ? redColor : lightGrey,
                       title: signup,
                       textColor: whiteColor,
-                      onPress: () async{
-                        if(isCheck !=false) {
+                      onPress: () async {
+                        if (nameController.text.isEmpty ||
+                            emailController.text.isEmpty ||
+                            passwordController.text.isEmpty ||
+                            passwordRetypeController.text.isEmpty) {
+                          // Show notification for empty fields
+                          showNotification(
+                              "Error", "All fields are required.");
+                          return;
+                        }
+
+                        if (isCheck != false) {
                           contoller.isloading(true);
                           try {
-                          await contoller.signupMethod(context:context,email:emailController.text,password: passwordController.text).then((value){
-                            return contoller.storeUserData(
-                              email:emailController.text,
-                              password: passwordController.text,
-                              name: nameController.text
-                            );
-                          }).then((value){
-                            VxToast.show(context, msg: loggedin);
-                            Get.offAll(()=>Home());
-                          });
+                            await contoller
+                                .signupMethod(
+                                context: context,
+                                email: emailController.text,
+                                password:
+                                passwordController.text)
+                                .then((value) {
+                              return contoller.storeUserData(
+                                email: emailController.text,
+                                password: passwordController.text,
+                                name: nameController.text,
+                              );
+                            }).then((value) {
+                              VxToast.show(context, msg: loggedin);
+                              Get.offAll(() => Home());
+                              // Show success notification
+                              showNotification(
+                                  "Success", "Sign up successful!");
+                            });
                           } catch (e) {
                             auth.signOut();
                             VxToast.show(context, msg: e.toString());
                             contoller.isloading(false);
+                            // Show error notification
+                            showNotification("Error", e.toString());
                           }
                         }
                       },
@@ -158,3 +240,4 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 }
+
