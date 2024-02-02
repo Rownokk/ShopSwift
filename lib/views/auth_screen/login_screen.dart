@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/get.dart';
+import 'package:velocity_x/velocity_x.dart';
 import 'package:emart_app/consts/consts.dart';
 import 'package:emart_app/consts/lists.dart';
 import 'package:emart_app/controller/auth_controller.dart';
@@ -10,7 +11,6 @@ import 'package:emart_app/widgets_common/applogo_widget.dart';
 import 'package:emart_app/widgets_common/bg_widget.dart';
 import 'package:emart_app/widgets_common/custom_textfield.dart';
 import 'package:emart_app/widgets_common/our_button.dart';
-import 'package:velocity_x/velocity_x.dart';
 
 class LoginScreen extends StatelessWidget {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -70,6 +70,16 @@ class LoginScreen extends StatelessWidget {
                       title: login,
                       textColor: whiteColor,
                       onPress: () async {
+                        if (controller.emailController.text.isEmpty ||
+                            controller.passwordController.text.isEmpty) {
+                          // Show notification for empty email or password
+                          _showLocalNotification(
+                            'Error',
+                            'Email and password are required.',
+                          );
+                          return;
+                        }
+
                         controller.isloading(true);
                         await controller.loginMethod(context: context)
                             .then((value) {
@@ -83,8 +93,10 @@ class LoginScreen extends StatelessWidget {
                           } else {
                             controller.isloading(false);
                             _showLocalNotification(
-                              'Login Failed',
-                              'Incorrect email or password.',
+                              'Login Successful',
+                              'You have successfully logged in.',
+                             // 'Login Failed',
+                             // 'Incorrect email or password.',
                             );
                           }
                         });
@@ -164,6 +176,7 @@ class LoginScreen extends StatelessWidget {
     );
   }
 }
+
 
 
 
