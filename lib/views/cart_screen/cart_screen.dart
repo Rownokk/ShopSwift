@@ -1,3 +1,4 @@
+import 'package:emart_app/consts/colors.dart';
 import 'package:emart_app/views/category_screen/category_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -85,7 +86,7 @@ class _CartScreenState extends State<CartScreen> {
                     );
                   },
                   style: ElevatedButton.styleFrom(primary: Colors.pinkAccent),
-                  child: Text('Proceed to Payment', style: TextStyle(color: Colors.white)),
+                  child: Text('Proceed to Payment', style: TextStyle(color: Colors.black)),
                 ),
                 SizedBox(height: 10),
                 ElevatedButton(
@@ -97,7 +98,7 @@ class _CartScreenState extends State<CartScreen> {
                     );
                   },
                   style: ElevatedButton.styleFrom(primary: Colors.pinkAccent),
-                  child: Text('Continue Shopping', style: TextStyle(color: Colors.white)),
+                  child: Text('Continue Shopping', style: TextStyle(color: Colors.black)),
                 ),
               ],
             ),
@@ -211,17 +212,17 @@ class PaymentScreen extends StatelessWidget {
             ),
             SizedBox(height: 20),
             PaymentMethodOption(
-              title: 'bKash',
+              title: 'BKASH',
               onPressed: () => handlePayment(context, 'bKash'),
             ),
             SizedBox(height: 20),
             PaymentMethodOption(
-              title: 'Nagad',
+              title: 'NAGAD',
               onPressed: () => handlePayment(context, 'Nagad'),
             ),
             SizedBox(height: 20),
             PaymentMethodOption(
-              title: 'Cash on Delivery',
+              title: 'CASH ON DELIVERY',
               onPressed: () => handlePayment(context, 'Cash on Delivery'),
             ),
           ],
@@ -235,8 +236,8 @@ class PaymentScreen extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Payment Result'),
-          content: Text('Payment successful with $paymentMethod!'),
+          title: Text('PAYMENT RESULT',style: TextStyle(color: Colors.pinkAccent)),
+          content: Text('PAYMENT SUCCESSFUL WITH $paymentMethod!',style: TextStyle(color: Colors.pinkAccent)),
           actions: [
             ElevatedButton(
               onPressed: () {
@@ -287,7 +288,7 @@ class PaymentMethodOption extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed,
-      style: ElevatedButton.styleFrom(primary: Colors.yellowAccent),
+      style: ElevatedButton.styleFrom(primary: Colors.pinkAccent),
       child: Text(
         title,
         style: TextStyle(color: Colors.black),
