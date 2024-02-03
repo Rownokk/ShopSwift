@@ -1,3 +1,4 @@
+// Import necessary packages and files
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
@@ -20,7 +21,7 @@ class SignupScreen extends StatefulWidget {
 
 class _SignupScreenState extends State<SignupScreen> {
   bool? isCheck = false;
-  var contoller = Get.put(AuthController());
+  var controller = Get.put(AuthController());
   var nameController = TextEditingController();
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
@@ -48,7 +49,8 @@ class _SignupScreenState extends State<SignupScreen> {
   Future<void> showNotification(String title, String body) async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
     AndroidNotificationDetails(
-      'your_channel_id', 'Your channel name',
+      'your_channel_id',
+      'Your channel name',
       //'Your channel description',
       importance: Importance.max,
       priority: Priority.high,
@@ -63,6 +65,38 @@ class _SignupScreenState extends State<SignupScreen> {
       body,
       platformChannelSpecifics,
       payload: 'item x',
+    );
+  }
+
+  Widget signupRulesWidget() {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Signup Rules'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Terms and Conditions:',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 10),
+              Text(
+                '1. You must be at least 18 years old to create an account.',
+                style: TextStyle(fontSize: 16),
+              ),
+              Text(
+                '2. Provide accurate and truthful information during the registration process.',
+                style: TextStyle(fontSize: 16),
+              ),
+              // Add more rules as needed
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -127,45 +161,54 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                         10.widthBox,
                         Expanded(
-                          child: RichText(
-                            text: TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: "I Agree To The ",
-                                  style: TextStyle(
-                                    fontFamily: regular,
-                                    color: fontGrey,
+                          child: InkWell(
+                            onTap: () {
+                              // Show signup rules within the SignupScreen
+                              showModalBottomSheet(
+                                context: context,
+                                builder: (context) => signupRulesWidget(),
+                              );
+                            },
+                            child: RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: "I Agree To The ",
+                                    style: TextStyle(
+                                      fontFamily: regular,
+                                      color: fontGrey,
+                                    ),
                                   ),
-                                ),
-                                TextSpan(
-                                  text: termAndCond,
-                                  style: TextStyle(
-                                    fontFamily: regular,
-                                    color: redColor,
+                                  TextSpan(
+                                    text: termAndCond,
+                                    style: TextStyle(
+                                      fontFamily: regular,
+                                      color: redColor,
+                                    ),
                                   ),
-                                ),
-                                TextSpan(
-                                  text: "&",
-                                  style: TextStyle(
-                                    fontFamily: regular,
-                                    color: fontGrey,
+                                  TextSpan(
+                                    text: "&",
+                                    style: TextStyle(
+                                      fontFamily: regular,
+                                      color: fontGrey,
+                                    ),
                                   ),
-                                ),
-                                TextSpan(
-                                  text: privacyPolicy,
-                                  style: TextStyle(
-                                    fontFamily: regular,
-                                    color: redColor,
+                                  TextSpan(
+                                    text: privacyPolicy,
+                                    style: TextStyle(
+                                      fontFamily: regular,
+                                      color: redColor,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         ),
                       ],
                     ),
                     5.heightBox,
-                    contoller.isloading.value
+                    controller.isloading.value
                         ? const CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation(redColor),
                     )
@@ -185,16 +228,15 @@ class _SignupScreenState extends State<SignupScreen> {
                         }
 
                         if (isCheck != false) {
-                          contoller.isloading(true);
+                          controller.isloading(true);
                           try {
-                            await contoller
+                            await controller
                                 .signupMethod(
                                 context: context,
                                 email: emailController.text,
-                                password:
-                                passwordController.text)
+                                password: passwordController.text)
                                 .then((value) {
-                              return contoller.storeUserData(
+                              return controller.storeUserData(
                                 email: emailController.text,
                                 password: passwordController.text,
                                 name: nameController.text,
@@ -209,7 +251,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           } catch (e) {
                             auth.signOut();
                             VxToast.show(context, msg: e.toString());
-                            contoller.isloading(false);
+                            controller.isloading(false);
                             // Show error notification
                             showNotification("Error", e.toString());
                           }
@@ -240,4 +282,5 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 }
+
 
