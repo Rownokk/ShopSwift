@@ -212,18 +212,18 @@ class PaymentScreen extends StatelessWidget {
             ),
             SizedBox(height: 20),
             PaymentMethodOption(
-              title: 'BKASH',
-              onPressed: () => handlePayment(context, 'bKash'),
+              title: 'PAYPAL',
+              onPressed: () => handlePayment(context, 'PAYPAL'),
             ),
             SizedBox(height: 20),
             PaymentMethodOption(
-              title: 'NAGAD',
-              onPressed: () => handlePayment(context, 'Nagad'),
+              title: 'CREDIT CARD',
+              onPressed: () => handlePayment(context, 'CREDIT CARD'),
             ),
             SizedBox(height: 20),
             PaymentMethodOption(
               title: 'CASH ON DELIVERY',
-              onPressed: () => handlePayment(context, 'Cash on Delivery'),
+              onPressed: () => handlePayment(context, 'CASH ON DELIVERY'),
             ),
           ],
         ),
