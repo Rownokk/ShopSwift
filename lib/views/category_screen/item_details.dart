@@ -7,8 +7,8 @@ import 'package:emart_app/views/cart_screen//cart_screen.dart';
 
 class ItemDetails extends StatefulWidget {
   final String? title;
-
-  const ItemDetails({Key? key, required this.title}) : super(key: key);
+  final Map<String, dynamic> product;
+  const ItemDetails({Key? key,required this.product, required this.title}) : super(key: key);
 
   @override
   _ItemDetailsState createState() => _ItemDetailsState();
@@ -50,6 +50,9 @@ class _ItemDetailsState extends State<ItemDetails> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // ... existing code
+               "${widget.product["price"]}".text.size(18).color(darkFontGrey).make(),
+
+
 
                     // Quantity selection
                     Row(

@@ -1348,7 +1348,7 @@ class BarsDetails extends StatelessWidget {
         context,
         MaterialPageRoute(
           builder: (context) => ItemDetails(
-            title: itemName, // Set your desired title
+            title: itemName, product: categoryData[category]![index], // Set your desired title
           ),
         ),
       );
