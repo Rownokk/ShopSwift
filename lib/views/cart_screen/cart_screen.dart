@@ -1,5 +1,7 @@
 import 'package:emart_app/views/category_screen/category_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 void main() {
   runApp(
@@ -88,13 +90,11 @@ class _CartScreenState extends State<CartScreen> {
                 SizedBox(height: 10),
                 ElevatedButton(
                   onPressed: () {
-                    // Implement Continue Shopping logic here
-                   // Navigator.pop(context);
+                    // Navigate to CategoriesScreen
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => CategoryScreen()),
                     );
-
                   },
                   style: ElevatedButton.styleFrom(primary: Colors.pinkAccent),
                   child: Text('Continue Shopping', style: TextStyle(color: Colors.white)),
@@ -187,6 +187,9 @@ class CartItemWidget extends StatelessWidget {
 }
 
 class PaymentScreen extends StatelessWidget {
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+  FlutterLocalNotificationsPlugin();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -237,6 +240,8 @@ class PaymentScreen extends StatelessWidget {
           actions: [
             ElevatedButton(
               onPressed: () {
+                // Show notification on "OK" press
+                showNotification();
                 Navigator.of(context).pop();
               },
               child: Text('OK'),
@@ -244,6 +249,27 @@ class PaymentScreen extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+
+  void showNotification() async {
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      'channel_id',
+      'channel_name',
+     // 'channel_description',
+      importance: Importance.max,
+      priority: Priority.high,
+    );
+   // var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+    var platformChannelSpecifics = NotificationDetails(
+        android: androidPlatformChannelSpecifics, //iOS: iOSPlatformChannelSpecifics
+    );
+
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      'Payment Successful',
+      'Your payment has been successfully processed!',
+      platformChannelSpecifics,
     );
   }
 }
@@ -269,3 +295,5 @@ class PaymentMethodOption extends StatelessWidget {
     );
   }
 }
+
+
