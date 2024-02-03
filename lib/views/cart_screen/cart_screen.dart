@@ -1,3 +1,4 @@
+import 'package:emart_app/views/category_screen/category_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -88,7 +89,12 @@ class _CartScreenState extends State<CartScreen> {
                 ElevatedButton(
                   onPressed: () {
                     // Implement Continue Shopping logic here
-                    Navigator.pop(context);
+                   // Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => CategoryScreen()),
+                    );
+
                   },
                   style: ElevatedButton.styleFrom(primary: Colors.pinkAccent),
                   child: Text('Continue Shopping', style: TextStyle(color: Colors.white)),
