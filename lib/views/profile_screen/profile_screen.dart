@@ -337,8 +337,8 @@ class _MessagesPageState extends State<MessagesPage> {
                     title: Text(message.text),
                     subtitle: Text(message.senderId),
                     tileColor: message.senderId == widget.receiverId
-                        ? Colors.blue[100]
-                        : (message.senderId == widget.deliveryManId ? Colors.green[100] : null),
+                        ? Colors.pinkAccent[100]
+                        : (message.senderId == widget.deliveryManId ? Colors.white : null),
                   );
                 },
               ),
