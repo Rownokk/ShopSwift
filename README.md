@@ -1,4 +1,4 @@
-# emart_app
+# ShopSwift
 
 A new Flutter project..
 
